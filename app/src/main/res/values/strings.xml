@@ -10,4 +10,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="training_name">Training Name:</string>
+    <string name="training_info">Enter your training informations</string>
+    <string name="training_image">Training Image</string>
+    <string name="no_image_is_loaded">No Image is loaded</string>
 </resources>
