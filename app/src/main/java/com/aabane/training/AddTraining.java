@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 public class AddTraining extends AppCompatActivity {
     private static final int RESULT_LOAD_IMG = 1;
@@ -55,11 +56,11 @@ public class AddTraining extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!Empty(Name_et)&&image_loaded){
-                    //TODO : Save to the database
+                    MyIntentService.startActionStoreTraining(AddTraining.this,new Training(Name_et.getText().toString().trim(),Training_Image));
                     Return();
                     Toast.makeText(getApplicationContext(),"Training Added",Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(getApplicationContext(),"Missing data",Toast.LENGTH_LONG).show();
+                else Toast.makeText(getApplicationContext(),"Missing data",Toast.LENGTH_LONG).show();
 
 
             }
