@@ -19,10 +19,9 @@ public class MyIntentService extends IntentService {
     }
 
 
-    public static void startActionStoreTraining(Context context, Training training) {
+    public static void startActionStoreTraining(Context context) {
         Intent intent = new Intent(context, MyIntentService.class);
         intent.setAction(ACTION_STORE_TRAINING);
-        intent.putExtra(EXTRA_PARAM1, training);
         context.startService(intent);
     }
 
@@ -32,7 +31,7 @@ public class MyIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_STORE_TRAINING.equals(action)) {
-                final Training param1 = (Training) intent.getSerializableExtra(EXTRA_PARAM1);
+                final Training param1 = (Training) AddTraining.training;
                 handleActionStoreTraining(param1);
             }
         }

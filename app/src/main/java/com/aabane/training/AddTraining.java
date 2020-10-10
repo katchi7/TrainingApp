@@ -31,6 +31,7 @@ public class AddTraining extends AppCompatActivity {
     Button getImage;
     TextView image_status;
     Bitmap Training_Image;
+    public static Training training;
     EditText Name_et;
     boolean image_loaded = false;
     @Override
@@ -56,7 +57,9 @@ public class AddTraining extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!Empty(Name_et)&&image_loaded){
-                    MyIntentService.startActionStoreTraining(AddTraining.this,new Training(Name_et.getText().toString().trim(),Training_Image));
+                    training = new Training(Name_et.getText().toString().trim(),Training_Image);
+                    MyIntentService.startActionStoreTraining(AddTraining.this);
+                    AddToList(training);
                     Return();
                     Toast.makeText(getApplicationContext(),"Training Added",Toast.LENGTH_LONG).show();
                 }
@@ -107,5 +110,8 @@ public class AddTraining extends AppCompatActivity {
     public boolean Empty(View view){
         if(((EditText)view).getText().toString().trim().length()==0) return true;
         return false;
+    }
+    public void AddToList(Training training){
+        Trainings.TrainingsList.add(training);
     }
 }

@@ -2,11 +2,13 @@ package com.aabane.training;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-public class Training implements Serializable {
+public class Training implements Parcelable {
     private int id;
     private String name;
     private byte[] image;
@@ -23,6 +25,24 @@ public class Training implements Serializable {
         this.image = image;
         this.name = name;
     }
+
+    protected Training(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        image = in.createByteArray();
+    }
+
+    public static final Creator<Training> CREATOR = new Creator<Training>() {
+        @Override
+        public Training createFromParcel(Parcel in) {
+            return new Training(in);
+        }
+
+        @Override
+        public Training[] newArray(int size) {
+            return new Training[size];
+        }
+    };
 
     public byte[] getImage() {
         return image;
@@ -54,5 +74,17 @@ public class Training implements Serializable {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
         return outputStream.toByteArray();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeByteArray(image);
     }
 }
