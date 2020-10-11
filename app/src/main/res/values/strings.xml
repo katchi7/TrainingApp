@@ -17,4 +17,5 @@
     <string name="start_training">Start Training</string>
     <string name="App_Description">Create and keep track of your trainings !</string>
     <string name="title_activity_trainings">Trainings</string>
+    <string name="title_activity_training_exercises">TrainingExercises</string>
 </resources>

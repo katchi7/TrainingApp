@@ -6,10 +6,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
 
-public class Training implements Parcelable {
-    private int id;
+
+public class Training {
+    private int id = 0;
     private String name;
     private byte[] image;
 
@@ -32,17 +32,6 @@ public class Training implements Parcelable {
         image = in.createByteArray();
     }
 
-    public static final Creator<Training> CREATOR = new Creator<Training>() {
-        @Override
-        public Training createFromParcel(Parcel in) {
-            return new Training(in);
-        }
-
-        @Override
-        public Training[] newArray(int size) {
-            return new Training[size];
-        }
-    };
 
     public byte[] getImage() {
         return image;
@@ -76,15 +65,4 @@ public class Training implements Parcelable {
         return outputStream.toByteArray();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(name);
-        parcel.writeByteArray(image);
-    }
 }

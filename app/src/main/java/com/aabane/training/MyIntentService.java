@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.io.Serializable;
 
 public class MyIntentService extends IntentService {
 
@@ -31,7 +28,7 @@ public class MyIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_STORE_TRAINING.equals(action)) {
-                final Training param1 = (Training) AddTraining.training;
+                final Training param1 = (Training) TrainingsHolder.getTraining();
                 handleActionStoreTraining(param1);
             }
         }
@@ -43,7 +40,7 @@ public class MyIntentService extends IntentService {
         training_database_handler.open();
         training_database_handler.add(param1);
         training_database_handler.close();
-        Toast.makeText(getApplicationContext(),"Stored",Toast.LENGTH_LONG);
+        Toast.makeText(getApplicationContext(),"Stored",Toast.LENGTH_LONG).show();
     }
 
 

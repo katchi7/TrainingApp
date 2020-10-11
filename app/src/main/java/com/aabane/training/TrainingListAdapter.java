@@ -30,6 +30,11 @@ public class TrainingListAdapter extends RecyclerView.Adapter<TrainingViewHolder
         holder.bind(myObject);
     }
 
+
+    public Training getItem(int position) {
+        return Trainings.get(position);
+    }
+
     @Override
     public int getItemCount() {
         return Trainings.size();

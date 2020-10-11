@@ -14,6 +14,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Training_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             Training_Name + " VARCHAR(50), " +
             Training_Image + " BLOB);";
+    private static String DELETE_Training_Query = "DROP TABLE " + Training_Table +";";
+
     public  DatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory,int version){
         super(context,name,factory,version);
     }
@@ -24,6 +26,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+        sqLiteDatabase.execSQL(DELETE_Training_Query);
         sqLiteDatabase.execSQL(Create_Table_Training_Query);
     }
 }

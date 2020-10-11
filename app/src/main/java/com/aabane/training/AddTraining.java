@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,7 +29,7 @@ public class AddTraining extends AppCompatActivity {
     Button getImage;
     TextView image_status;
     Bitmap Training_Image;
-    public static Training training;
+    private Training training;
     EditText Name_et;
     boolean image_loaded = false;
     @Override
@@ -50,7 +48,7 @@ public class AddTraining extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Return();
+                Return(RESULT_CANCELED);
             }
         });
         add.setOnClickListener(new View.OnClickListener() {
@@ -58,10 +56,9 @@ public class AddTraining extends AppCompatActivity {
             public void onClick(View view) {
                 if(!Empty(Name_et)&&image_loaded){
                     training = new Training(Name_et.getText().toString().trim(),Training_Image);
+                    TrainingsHolder.setTraining(training);
                     MyIntentService.startActionStoreTraining(AddTraining.this);
-                    AddToList(training);
-                    Return();
-                    Toast.makeText(getApplicationContext(),"Training Added",Toast.LENGTH_LONG).show();
+                    Return(RESULT_OK);
                 }
                 else Toast.makeText(getApplicationContext(),"Missing data",Toast.LENGTH_LONG).show();
 
@@ -103,8 +100,8 @@ public class AddTraining extends AppCompatActivity {
             Toast.makeText(AddTraining.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
     }
-    public void Return(){
-        setResult(RESULT_OK);
+    public void Return(int result){
+        setResult(result);
         finish();
     }
     public boolean Empty(View view){

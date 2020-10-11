@@ -3,8 +3,9 @@ package com.aabane.training;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.aabane.training.utils.ItemClickSupport;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,16 +13,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Trainings extends AppCompatActivity {
+public class Trainings extends AppCompatActivity  {
+    public static final String EXTRA_ID = "com.aabane.training.Trainings.id";
     ImageButton back ;
     RecyclerView trainings_rv;
     TrainingListAdapter Adapter;
-    public static ArrayList<Training> TrainingsList = new ArrayList<>();
+    public static ArrayList<Training> TrainingsList;
     private static final int ADD_TRAINING_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +54,12 @@ public class Trainings extends AppCompatActivity {
             }
         });
 
+        TrainingsList = new ArrayList<>();
         trainings_rv.setLayoutManager(new LinearLayoutManager(this));
         Adapter = new TrainingListAdapter(TrainingsList);
         trainings_rv.setAdapter(Adapter);
-
+        configureOnClickRecyclerView();
+        LoadTrainings();
     }
     public void Return(){
         setResult(RESULT_OK);
@@ -59,6 +69,42 @@ public class Trainings extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Adapter.notifyDataSetChanged();
+        if(resultCode == RESULT_OK) Adapter.notifyDataSetChanged();
     }
+    private void configureOnClickRecyclerView(){
+        ItemClickSupport.addTo(trainings_rv, R.layout.trainings_adapter)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        OnItemClicked(position);
+                    }
+                });
+    }
+
+    private void OnItemClicked(int position) {
+        int id = Adapter.getItem(position).getId();
+        Intent i = new Intent(this,TrainingExercises.class);
+        i.putExtra(EXTRA_ID,id);
+        startActivity(i);
+    }
+    public void LoadTrainings() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TrainingDAO db = new TrainingDAO(getApplicationContext());
+                db.open();
+                ArrayList<Training> training =db.LoadAll();
+                for(Training t : training){
+                    TrainingsList.add(t);
+                }
+                DatabaseLoadingHandler Handler = new DatabaseLoadingHandler();
+                Message message = Handler.obtainMessage();
+                message.obj = Adapter;
+                message.arg1 = DatabaseLoadingHandler.ALL_TRAINING_LOADING_MESSAGE;
+                Handler.sendMessage(message);
+                db.close();
+            }
+        }).run();
+    }
+
 }

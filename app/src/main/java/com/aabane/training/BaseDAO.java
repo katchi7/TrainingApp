@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 public class BaseDAO {
-    protected final static int VERSION = 1;
+    protected final static int VERSION = 2;
     // Le nom du fichier qui représente ma base
     protected final static String NOM = "trainings_database.db";
 

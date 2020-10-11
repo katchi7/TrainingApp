@@ -6,7 +6,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/CardAddTraining"
         android:layout_width="356dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:checkable="true"
         android:clickable="true"
         android:focusable="true"
@@ -16,17 +16,20 @@
         >
 
         <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <ImageView
+                android:adjustViewBounds="true"
                 android:id="@+id/training_image"
-                android:layout_width="150dp"
+                android:layout_width="87dp"
+                android:maxHeight="200dp"
+                android:maxWidth="200dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/addtraining" />
-
+                android:src="@drawable/addtraining"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
