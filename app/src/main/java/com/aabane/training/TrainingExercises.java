@@ -1,5 +1,6 @@
 package com.aabane.training;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,6 +24,7 @@ public class TrainingExercises extends AppCompatActivity {
     ImageButton back ;
     TextView Name;
     ImageView Training_Image_View;
+    Training training = null;
     int Training_Id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +48,10 @@ public class TrainingExercises extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(TrainingExercises.this,AddExerciseActivity.class);
+                i.putExtra(AddExerciseActivity.TRAINING_NAME,training.getName());
+                i.putExtra(AddExerciseActivity.TRAINING_ID,training.getId());
+                startActivity(i);
             }
         });
     }
@@ -61,7 +65,7 @@ public class TrainingExercises extends AppCompatActivity {
             public void run() {
                 TrainingDAO db = new TrainingDAO(getApplicationContext());
                 db.open();
-                Training training = db.Load(Training_Id);
+                training = db.Load(Training_Id);
                 DatabaseLoadingHandler Handler = new DatabaseLoadingHandler();
                 Message message = Handler.obtainMessage();
                 HashMap<String,Object> obj =  new HashMap<String,Object>();

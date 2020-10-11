@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
         <activity
+            android:name=".AddExerciseActivity"
+            android:label="@string/title_activity_add_exercise"
+            android:theme="@style/Theme.App.NoActionBar"></activity>
+        <activity
             android:name=".TrainingExercises"
             android:label="@string/title_activity_training_exercises"
-            android:theme="@style/Theme.App.NoActionBar"></activity>
+            android:theme="@style/Theme.App.NoActionBar" />
 
         <service
             android:name=".MyIntentService"

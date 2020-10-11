@@ -18,4 +18,6 @@
     <string name="App_Description">Create and keep track of your trainings !</string>
     <string name="title_activity_trainings">Trainings</string>
     <string name="title_activity_training_exercises">TrainingExercises</string>
+    <string name="title_activity_add_exercise">Add Exercise</string>
+    <string name="exercise_info">Enter your exercise informations</string>
 </resources>
