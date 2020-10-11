@@ -86,7 +86,7 @@ public class AddTraining extends AppCompatActivity {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                Training_Image = selectedImage;
+                Training_Image = getResizedBitmap(selectedImage,750);
                 image_status.setText("Image Loaded");
                 image_status.setTextColor(getResources().getColor(R.color.green));
                 image_loaded=true;
@@ -110,5 +110,19 @@ public class AddTraining extends AppCompatActivity {
     }
     public void AddToList(Training training){
         Trainings.TrainingsList.add(training);
+    }
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 }

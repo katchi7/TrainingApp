@@ -44,14 +44,15 @@ public class TrainingDAO extends BaseDAO {
         //TODO Loop to load all the Database items
         c.moveToFirst();
         int i = c.getCount();
+        if(i==0) return Trainings;
         Log.e("TESTING",i+" rows");
         while(i!=0) {
             int index = c.getColumnIndexOrThrow(Training_Name);
-            String name = c.getString(1);
+            String name = c.getString(index);
             index = c.getColumnIndexOrThrow(Training_id);
-            int id = c.getInt(0);
+            int id = c.getInt(index);
             index = c.getColumnIndexOrThrow(Training_Image);
-            byte[] Image = c.getBlob(2);
+            byte[] Image = c.getBlob(index);
             Trainings.add(new Training(id,name,Image));
             c.moveToNext();
             i--;

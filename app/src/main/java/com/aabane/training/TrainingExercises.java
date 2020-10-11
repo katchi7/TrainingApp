@@ -61,7 +61,7 @@ public class TrainingExercises extends AppCompatActivity {
             public void run() {
                 TrainingDAO db = new TrainingDAO(getApplicationContext());
                 db.open();
-                Training training = db.Load(3);
+                Training training = db.Load(Training_Id);
                 DatabaseLoadingHandler Handler = new DatabaseLoadingHandler();
                 Message message = Handler.obtainMessage();
                 HashMap<String,Object> obj =  new HashMap<String,Object>();
