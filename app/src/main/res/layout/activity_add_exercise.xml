@@ -95,6 +95,7 @@
                         android:text="Max Width"
                         />
                         <EditText
+                            android:id="@+id/Weight_et"
                             android:inputType="number"
                             android:layout_gravity="center"
                             android:gravity="center"
@@ -114,6 +115,7 @@
                             android:text="Max Reps"
                             />
                         <EditText
+                            android:id="@+id/Reps_et"
                             android:inputType="number"
                             android:layout_gravity="center"
                             android:gravity="center"
