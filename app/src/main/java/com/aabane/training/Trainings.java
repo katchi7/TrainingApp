@@ -30,6 +30,7 @@ public class Trainings extends AppCompatActivity  {
     RecyclerView trainings_rv;
     TrainingListAdapter Adapter;
     public static ArrayList<Training> TrainingsList;
+    DatabaseLoadingHandler Handler;
     private static final int ADD_TRAINING_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class Trainings extends AppCompatActivity  {
         trainings_rv.setLayoutManager(new LinearLayoutManager(this));
         Adapter = new TrainingListAdapter(TrainingsList);
         trainings_rv.setAdapter(Adapter);
+        Handler = new DatabaseLoadingHandler();
         configureOnClickRecyclerView();
         LoadTrainings();
     }
@@ -93,18 +95,15 @@ public class Trainings extends AppCompatActivity  {
             public void run() {
                 TrainingDAO db = new TrainingDAO(getApplicationContext());
                 db.open();
-                ArrayList<Training> training =db.LoadAll();
-                for(Training t : training){
-                    TrainingsList.add(t);
-                }
-                DatabaseLoadingHandler Handler = new DatabaseLoadingHandler();
+                ArrayList<Training> training = db.LoadAll();
+                TrainingsList.addAll(training);
                 Message message = Handler.obtainMessage();
                 message.obj = Adapter;
                 message.arg1 = DatabaseLoadingHandler.ALL_TRAINING_LOADING_MESSAGE;
                 Handler.sendMessage(message);
                 db.close();
             }
-        }).run();
+        }).start();
     }
 
 }

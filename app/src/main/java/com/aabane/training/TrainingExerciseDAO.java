@@ -3,7 +3,10 @@ package com.aabane.training;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrainingExerciseDAO extends BaseDAO {
@@ -43,8 +46,38 @@ public class TrainingExerciseDAO extends BaseDAO {
     }
     //TODO IMPLEMENT THIS SHITTTTTTTTT
     public List<TrainingExercice> getTrainingExercises(int TrainingId){
-    return null;
+        ArrayList<TrainingExercice> Exercises = new ArrayList<>();
+        Cursor c = mDb.rawQuery("select * from " + Exercise_Table+" WHERE "+Training_id + " =?" , new String[]{""+TrainingId});
+        //TODO Loop to load all the Database items
+        c.moveToFirst();
+        int i = c.getCount();
+        if(i==0) return Exercises;
+        Log.e("TESTING",i+" rows");
+        int k = i;
+        while(i!=0) {
+            int index = c.getColumnIndexOrThrow(Exercise_Name);
+            String name = c.getString(index);
+            index = c.getColumnIndexOrThrow(Training_id);
+            int training_id = c.getInt(index);
+            index = c.getColumnIndexOrThrow(Exercise_id);
+            int exercise_id = c.getInt(index);
+            index = c.getColumnIndexOrThrow(Exercise_Image);
+            byte[] Image = c.getBlob(index);
+            index = c.getColumnIndexOrThrow(Exercise_Weight);
+            int weight = c.getInt(index);
+            index = c.getColumnIndexOrThrow(Exercise_reps);
+            int reps = c.getInt(index);
+            Exercises.add(new TrainingExercice(training_id,exercise_id,name,weight,reps,Image));
+            c.moveToNext();
+            i--;
+            Log.e("TESTING",i+" rows");
+        }
+        c.close();
+        Log.d("Test","Added "+ k + " Exercises");
+        return Exercises;
+
     }
+
     public void UpdateExerciseMaxWeight(int ExerciseId,int MaxWidth){
         mDb.rawQuery(UPDATE_EXERCISE_WEIGHT_QUERY,new String[]{""+MaxWidth,""+ExerciseId});
     }

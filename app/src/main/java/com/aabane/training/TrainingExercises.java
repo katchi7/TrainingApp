@@ -8,6 +8,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.os.Message;
@@ -18,12 +20,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class TrainingExercises extends AppCompatActivity {
     ImageButton back ;
     TextView Name;
     ImageView Training_Image_View;
+    ExerciseListAdapter Adapter ;
+    List<TrainingExercice> Exercises;
+    RecyclerView recyclerView;
+    DatabaseLoadingHandler Handler;
     Training training = null;
     int Training_Id;
     @Override
@@ -31,6 +39,7 @@ public class TrainingExercises extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_exercises);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        recyclerView = findViewById(R.id.Exercises_Rv);
         Name = findViewById(R.id.training_Name_tv);
         Training_Image_View = findViewById(R.id.training_image);
         setSupportActionBar(toolbar);
@@ -38,12 +47,14 @@ public class TrainingExercises extends AppCompatActivity {
         Training_Id = getIntent().getIntExtra(Trainings.EXTRA_ID,0);
         Log.d("TEST",""+Training_Id);
         LoadTrainingInfo(Training_Id,Training_Image_View,Name);
+        Handler = new DatabaseLoadingHandler();
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Return(RESULT_CANCELED);
             }
         });
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +65,11 @@ public class TrainingExercises extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Exercises = new ArrayList<>();
+        Adapter = new ExerciseListAdapter(Exercises);
+        recyclerView.setAdapter(Adapter);
+        LoadExercises();
     }
     public void Return(int result){
         setResult(result);
@@ -66,7 +82,6 @@ public class TrainingExercises extends AppCompatActivity {
                 TrainingDAO db = new TrainingDAO(getApplicationContext());
                 db.open();
                 training = db.Load(Training_Id);
-                DatabaseLoadingHandler Handler = new DatabaseLoadingHandler();
                 Message message = Handler.obtainMessage();
                 HashMap<String,Object> obj =  new HashMap<String,Object>();
                 obj.put("training",training);
@@ -77,6 +92,25 @@ public class TrainingExercises extends AppCompatActivity {
                 Handler.sendMessage(message);
                 db.close();
             }
-        }).run();
+        }).start();
+    }
+    public void LoadExercises(){
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        TrainingExerciseDAO db = new TrainingExerciseDAO(getApplicationContext());
+                        db.open();
+                        Exercises.addAll(db.getTrainingExercises(Training_Id));
+
+                        Message message = Handler.obtainMessage();
+                        message.obj = Adapter;
+                        message.arg1 = DatabaseLoadingHandler.ALL_EXERCISES_LOADING_MESSAGE;
+                        Handler.sendMessage(message);
+                        db.close();
+                    }
+                }
+        ).start();
+
     }
 }

@@ -32,7 +32,6 @@ public class AddExerciseActivity extends AppCompatActivity {
     TextView image_status;
 
     Bitmap Training_Image;
-    private Training training;
     EditText Name_et;
     EditText Weight_et;
     EditText Reps_et;
@@ -66,9 +65,11 @@ public class AddExerciseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(!Empty(Name_et)&&!Empty(Weight_et)&&!Empty(Weight_et)&&image_loaded){
                     //TODO Create a Training Exercice Object and store it to the database
+
                     //Creating the object
                     trainingExercice = new TrainingExercice(Training_id,Name_et.getText().toString().trim(),Integer.parseInt(Weight_et.getText().toString().trim()),Integer.parseInt(Reps_et.getText().toString().trim()),Training_Image);
                     TrainingExerciseHolder.setExercise(trainingExercice);
+                    MyIntentService.startActionStoreExercise(AddExerciseActivity.this);
                     Return(RESULT_OK);
                 }
                 else Toast.makeText(getApplicationContext(),"Missing data",Toast.LENGTH_LONG).show();

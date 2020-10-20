@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class DatabaseLoadingHandler extends Handler {
     public static final int TRAINING_LOADING_MESSAGE = 0;
     public static final int ALL_TRAINING_LOADING_MESSAGE = 1;
+    public static final int ALL_EXERCISES_LOADING_MESSAGE = 2;
     @Override
     public void handleMessage(Message message){
         super.handleMessage(message);
@@ -23,6 +24,10 @@ public class DatabaseLoadingHandler extends Handler {
             TrainingListAdapter Adapter = (TrainingListAdapter) message.obj;
             Adapter.notifyDataSetChanged();
 
+        }
+        if(message.arg1 == ALL_EXERCISES_LOADING_MESSAGE){
+            ExerciseListAdapter Adapter = (ExerciseListAdapter) message.obj;
+            Adapter.notifyDataSetChanged();
         }
 
     }
